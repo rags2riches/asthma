@@ -1,5 +1,8 @@
 # source("FCBFig005_6clkmdata_NOalvmacro5.R")
 
+#input-> file produced by IG.R where columns are patients and the rows are variables and the discretized clusters
+#identifies redundant variables for each cluster type - modified from "FCBFig005_6clkmdata_NOalvmacro5.R"
+
 rm(list=ls())
 
 source("/Users/Raghu/Documents/asthma/code/dir_info.R")
