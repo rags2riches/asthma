@@ -53,11 +53,11 @@ discret.datafile.fp=file.path(base.dir,"results","discretEWkm_IGsort_samplescl6v
   su.ic=NULL # calculate infogain comparing each variable to the phenotypes columns values
   for (i.var in 1:n.var) {
   # i.var =1
-    cat(i.var, "\n")
+    cat(i.var, "\n") #displays which variable it caclulates it for to the console
     su.ic=c(su.ic, infogain(phenotypes, data[i.var, ]))
   }
 
-## order su.data in descending order ##
+## order su.data in descending order ## why do we do this if the file is already ordered from best variable to worst based on infogain variable
  
 su.ic.var=rownames(data) #variable names 
 idx.ord=order(su.ic, decreasing=T) # indicies of order based on decreasing infogain value
@@ -65,7 +65,7 @@ S.list=su.ic[idx.ord] #order infograin values
 S.list.var=su.ic.var[idx.ord] #order variables based on infogain
 names(S.list)=S.list.var
 
-S.list=S.list[S.list>0.05] #remove variables that have infogain value less .05 
+S.list=S.list[S.list>0.05] #remove variables that have infogain value less .05  -> why? they don't matter anyway?
 S.list.var=names(S.list) 
 
 ##
@@ -74,23 +74,23 @@ Fj=S.list.var[idx.Fj] # start with highest rated variable
 var.reord=NULL
 while (!is.na(Fj)) { #iterate through all the variables in S.list.var until NA element is selected(at end of list)
 
- cat(Fj, "\n") #combine variable name with new line character
+ cat(Fj, "\n") #print out line number to console
  idx.Fi=idx.Fj+1 #increase index to look at next variable
  Fi=S.list.var[idx.Fi] #get next variable 
  idx.Fi.rm=NULL
- while (!is.na(Fi)) { #until looked at all variables 
+ while (!is.na(Fi)) { #compare variable j with all other possible combinations of varibles i
   su1.ij=infogain(data[Fi, ], data[Fj, ]) #calculate the similarity between the two varibales Fi and Fj
   #su1.ic=S.list[idx.Fi]
   su1.ic=infogain(data[Fi, ], phenotypes) #compare that similarity to the phenotypes 
-  if (su1.ij>=su1.ic) {
-   idx.Fi.rm=c(idx.Fi.rm, idx.Fi)
+  if (su1.ij>=su1.ic) {  #if closer infogain match to variable than to cluster 
+   idx.Fi.rm=c(idx.Fi.rm, idx.Fi) #adds the index of the variable that is redundant to the variable at hand 
   }
-  idx.Fi=idx.Fi+1
-  Fi=S.list.var[idx.Fi]
- }
- if (!is.null(idx.Fi.rm)) {
-  var.reord=c(var.reord, paste("(", Fj, ")", sep=""), S.list.var[idx.Fi.rm])
-  S.list.var=S.list.var[-idx.Fi.rm]
+  idx.Fi=idx.Fi+1 # look a the next variable
+  Fi=S.list.var[idx.Fi] # new variable to compare 
+ } # while loop ends when compared to all other variables 
+ if (!is.null(idx.Fi.rm)) { # if some redundant variable(s) was identified 
+  var.reord=c(var.reord, paste("(", Fj, ")", sep=""), S.list.var[idx.Fi.rm]) 
+  S.list.var=S.list.var[-idx.Fi.rm] #remove varible from list of total variables 
  } else {
   var.reord=c(var.reord, paste("(", Fj, ")", sep=""))
  }
@@ -99,11 +99,13 @@ while (!is.na(Fj)) { #iterate through all the variables in S.list.var until NA e
  Fj=S.list.var[idx.Fj]
 }
 
+# the infogain value for each variable when compared to the phenotypes cluster determination for all the variables that are not redundant 
 S.list.f=cbind(S.list.var, formatC(S.list[S.list.var]))
 colnames(S.list.f)=c("Variable", "Su")
 S.list.ffile=gsub("discret", "FCBFig005nonredundvar", discret.datafile.fp)
 write.table(S.list.f, S.list.ffile, col.names=T, row.names=F, quote=F, sep="\t")
 
+#writees the 
 var.reord.file=gsub("discret", "varreord.FCBFig005nonredund", discret.datafile.fp)
 write.table(var.reord, var.reord.file, col.names=F, row.names=F, quote=F, sep="\t")
 
