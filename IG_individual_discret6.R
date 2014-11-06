@@ -73,7 +73,7 @@ for (cluster.var in allclusters) { #does each cluster analysis one at a time
     #filenameprefix = "SuEW_Individual_"
     #filenamespecific = gsub("_",cluster.var,filenameprefix)
     #su.file=gsub("datacluster", filenamespecific, basename(clinic.file))
-    su.file = gsub("%",cluster.var,"C%_SuEW_indiviudal_d2.txt")
+    su.file = gsub("%",cluster.var,"C%_SuEW_indiviudal_d6.txt")
     su.file.fp=file.path(res.dir, su.file)
     write.table(su.data.all, su.file.fp, row.names=F,col.names=T, quote=F, sep="\t")
 
@@ -83,7 +83,7 @@ for (cluster.var in allclusters) { #does each cluster analysis one at a time
     #filenameprefix = "discretEW_Individual_"
     #filenamespecific = gsub("_",cluster.var,filenameprefix)
     #discret.data.file=gsub("datacluster", filenamespecific, basename(clinic.file))
-    discret.data.file = gsub("%",cluster.var,"C%_discret_indiviudal_d2.txt")
+    discret.data.file = gsub("%",cluster.var,"C%_discret_indiviudal_d6.txt")
     discret.data.file.fp=file.path(res.dir, discret.data.file)
     write.table(discret.data.all, discret.data.file.fp, row.names=F,col.names=T, quote=F, sep="\t")
 }
