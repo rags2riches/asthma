@@ -16,12 +16,14 @@ discret.folder = gsub("%",discretization.type,"discret%")
 
     ## read discrete data ##
     cluster.folder = gsub("%",cluster.type,"cluster%")
-    overall.inputfile = "discretEW%Individual%km_IGsort_samplescl6var10_NOalvmacro5.txt"
-    cluster.inputfile = gsub("%",cluster.type,overall.inputfile)
+    inputfile = gsub("%",cluster.type,"C%_discret_indiviudal_d!.txt")
+    inputfile = gsub("!",discretization.type,inputfile)
+    #overall.inputfile = "discretEW%Individual%km_IGsort_samplescl6var10_NOalvmacro5.txt"
+    #cluster.inputfile = gsub("%",cluster.type,overall.inputfile)
 
 
-    discret.datafile.fp=file.path(res.dir,discret.folder,cluster.folder,cluster.inputfile) #text file of data 
-
+    discret.datafile.fp=file.path(res.dir,discret.folder,cluster.folder,inputfile) #text file of data 
+    output.datafile.path = file.path(res.dir,discret.folder,cluster.folder)
     #discret.datafile="discretEWkm_6clpats_NOalvmacro5neword.txt"
     #discret.datafile.fp=file.path(kmeansclass.newdir, discret.datafile)
 
@@ -111,11 +113,17 @@ discret.folder = gsub("%",discretization.type,"discret%")
     # the infogain value for each variable when compared to the phenotypes cluster determination for all the variables that are not redundant 
     S.list.f=cbind(S.list.var, formatC(S.list[S.list.var]))
     colnames(S.list.f)=c("Variable", "Su")
-    S.list.ffile=gsub("discretE", "FCBFig005nonredundvar", discret.datafile.fp)
+    #S.list.ffile=gsub("discretE", "FCBFig005nonredundvar", discret.datafile.fp)
+    S.list.filename = gsub("%",cluster.type,"C%_FCBnonredund_d!.txt")
+    S.list.filename = gsub("!",discretization.type,S.list.filename)
+    S.list.ffile = file.path(output.datafile.path,S.list.filename)
     write.table(S.list.f, S.list.ffile, col.names=T, row.names=F, quote=F, sep="\t")
 
     #writees the 
-    var.reord.file=gsub("discretE", "varreord.FCBFig005nonredund", discret.datafile.fp)
+    #var.reord.file=gsub("discretE", "varreord.FCBFig005nonredund", discret.datafile.fp)
+    var.reord.filename = gsub("%",cluster.type,"C%_varreord.FCBnonredund_d!.txt")
+    var.reord.filename = gsub("!",discretization.type,var.reord.filename)
+    var.reord.file = file.path(output.datafile.path,var.reord.filename)
     write.table(var.reord, var.reord.file, col.names=F, row.names=F, quote=F, sep="\t")
   }
 }
