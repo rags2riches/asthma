@@ -53,15 +53,17 @@ for (cluster.var in allclusters) { #does each cluster analysis one at a time
   
     # at end of loop discret.data has each column represent all the variables for one patient
     res.dir=overallres.dir
-    res.dir = gsub("%",cluster.var,res.dir) #change results to put into c
+    res.dir = gsub("%",cluster.var,res.dir) #make sure enters correct file
+
     idx.varig=1:ncol(data) #matrix of the sequence from 1 to the number of columns
     idx.varig.reord=idx.varig[order(infogain.data[idx.varig], decreasing=T)] #sorts the varibles from largest to smallest infogain #the largest are the variables that best edict cluster labels
     infogain.data.all=cbind(col.data[idx.varig.reord], infogain.data[idx.varig.reord]) # has the variables and infogain values from largest to smallest (Best to worst variables for estimating clusters)
     colnames(infogain.data.all)=c("Variable", "InfoGain") #set column headers
-    filenameprefix = "Infogain_"
-    filenamespecific = gsub("_",cluster.var,filenameprefix)
-    infogain.file=gsub("datacluster", filenamespecific, basename(clinic.file)) #change begining of name of infile into InfogainEW
-    infogain.file.fp=file.path(res.dir, infogain.file) #put results file in results directory
+    #filenameprefix = "Infogain_"
+    #filenamespecific = gsub("_",cluster.var,filenameprefix)
+    #infogain.file=gsub("datacluster", filenamespecific, basename(clinic.file)) #change begining of name of infile into InfogainEW
+    infogain.file = gsub("%",cluster.var,"C%_Infogain_indiviudal_d2.txt")
+    infogain.file.fp=file.path(res.dir, infogain.file) #put results file in resulclusts directory
     write.table(infogain.data.all, infogain.file.fp, row.names=F,col.names=T, quote=F, sep="\t") #generate table in file
   
     #do the same thing for the normalized inforgain data 
@@ -69,18 +71,20 @@ for (cluster.var in allclusters) { #does each cluster analysis one at a time
     idx.varsu.reord=idx.varsu[order(su.data[idx.varsu], decreasing=T)]
     su.data.all=cbind(col.data[idx.varsu.reord], su.data[idx.varsu.reord])
     colnames(su.data.all)=c("Variable", "SU")
-    filenameprefix = "SuEW_Individual_"
-    filenamespecific = gsub("_",cluster.var,filenameprefix)
-    su.file=gsub("datacluster", filenamespecific, basename(clinic.file))
+    #filenameprefix = "SuEW_Individual_"
+    #filenamespecific = gsub("_",cluster.var,filenameprefix)
+    #su.file=gsub("%",cluster.var,"%SuEW_individual_discret2")
+    su.file = gsub("%",cluster.var,"C%_SuEW_indiviudal_d2.txt")
     su.file.fp=file.path(res.dir, su.file)
     write.table(su.data.all, su.file.fp, row.names=F,col.names=T, quote=F, sep="\t")
 
     #make file for the matrix of varibales for each patient
     discret.data.all=cbind(col.data[idx.varig.reord], discret.data[idx.varig.reord, ])
     colnames(discret.data.all)=c("Variable", phenotypes)
-    filenameprefix = "discretEW_Individual_"
-    filenamespecific = gsub("_",cluster.var,filenameprefix)
-    discret.data.file=gsub("datacluster", filenamespecific, basename(clinic.file))
+    #filenameprefix = "discretEW_Individual_"
+    #filenamespecific = gsub("_",cluster.var,filenameprefix)
+    #discret.data.file=gsub("datacluster", filenamespecific, basename(clinic.file))
+    discret.data.file = gsub("%",cluster.var,"C%_discret_indiviudal_d2.txt")
     discret.data.file.fp=file.path(res.dir, discret.data.file)
     write.table(discret.data.all, discret.data.file.fp, row.names=F,col.names=T, quote=F, sep="\t")
 }
